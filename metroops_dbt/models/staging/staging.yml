@@ -1,0 +1,164 @@
+version: 2
+
+models:
+  - name: stg_compressors
+    description: "Staging model for compressor master data."
+
+    columns:
+      - name: compressor_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: facility_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_facilities')
+                field: facility_id
+
+
+  - name: stg_facilities
+    description: "Staging model for facility master data."
+
+    columns:
+      - name: facility_id
+        data_tests:
+          - not_null
+          - unique
+
+
+  - name: stg_fault_events
+    description: "Staging model for compressor fault events."
+
+    columns:
+      - name: fault_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: compressor_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_compressors')
+                field: compressor_id
+
+      - name: fault_start
+        data_tests:
+          - not_null
+
+      - name: fault_end
+        data_tests:
+          - not_null
+
+
+  - name: stg_work_orders
+    description: "Staging model for maintenance work orders."
+
+    columns:
+      - name: work_order_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: compressor_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_compressors')
+                field: compressor_id
+
+      - name: fault_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_fault_events')
+                field: fault_id
+
+      - name: technician_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_technicians')
+                field: technician_id
+
+      - name: opened_at
+        data_tests:
+          - not_null
+
+      - name: closed_at
+        data_tests:
+          - not_null
+
+      - name: maintenance_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Corrective', 'Preventive']
+
+
+  - name: stg_maintenance_events
+    description: "Staging model for completed maintenance events."
+
+    columns:
+      - name: maintenance_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: work_order_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_work_orders')
+                field: work_order_id
+
+      - name: compressor_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_compressors')
+                field: compressor_id
+
+      - name: technician_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_technicians')
+                field: technician_id
+
+      - name: maintenance_date
+        data_tests:
+          - not_null
+
+      - name: maintenance_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Corrective', 'Preventive']
+
+
+  - name: stg_technicians
+    description: "Staging model for technician master data."
+
+    columns:
+      - name: technician_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: home_facility_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_facilities')
+                field: facility_id

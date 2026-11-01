@@ -1,0 +1,44 @@
+# Python virtual environments
+.venv/
+.venv-1/
+.venv-1 copy/
+.venv-2/
+.venv-dbt/
+
+# Python generated files
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Secrets / environment
+.env
+*.env
+
+# Local datasets
+data/
+
+# General logs
+logs/
+
+# Airflow generated/private files
+airflow/.env
+airflow/logs/
+airflow/config/
+airflow/dags/__pycache__/
+
+# dbt generated files
+metroops_dbt/logs/
+metroops_dbt/target/
+metroops_dbt/dbt_packages/
+
+# Terraform generated/state files
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+*.tfstate
+*.tfstate.*
+
+# IDE / OS
+.vscode/
+Thumbs.db
+.DS_Store

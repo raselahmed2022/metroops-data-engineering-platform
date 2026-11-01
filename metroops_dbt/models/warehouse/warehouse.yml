@@ -1,0 +1,101 @@
+version: 2
+
+models:
+  - name: fct_faults
+    description: "Fact table containing one row per compressor fault event."
+
+    columns:
+      - name: fault_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: compressor_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_compressor')
+                field: compressor_id
+
+      - name: facility_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_facility')
+                field: facility_id
+
+      - name: fault_start
+        data_tests:
+          - not_null
+
+      - name: fault_end
+        data_tests:
+          - not_null
+
+
+  - name: fct_maintenance
+    description: "Fact table containing one row per completed work order and maintenance event."
+
+    columns:
+      - name: work_order_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: maintenance_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: compressor_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_compressor')
+                field: compressor_id
+
+      - name: facility_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_facility')
+                field: facility_id
+
+      - name: technician_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_technician')
+                field: technician_id
+
+      - name: maintenance_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Corrective', 'Preventive']
+
+
+  - name: fct_sensor_daily
+    description: "Daily aggregated compressor sensor readings. One row per compressor per day."
+
+    columns:
+      - name: compressor_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_compressor')
+                field: compressor_id
+
+      - name: reading_date
+        data_tests:
+          - not_null
+
+      - name: reading_count
+        data_tests:
+          - not_null

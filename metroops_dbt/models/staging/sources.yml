@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: bronze
+    database: awsdatacatalog
+    schema: metroops_bronze
+
+    tables:
+      - name: compressors
+      - name: facilities
+      - name: sensor_readings
+      - name: fault_events
+      - name: work_orders
+      - name: maintenance_events
+      - name: technicians
+      - name: spare_parts
+      - name: work_order_parts
+      - name: operating_targets
+      - name: daily_operating_kpis
