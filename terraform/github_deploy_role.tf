@@ -91,7 +91,8 @@ resource "aws_iam_role_policy" "github_deploy" {
           "glue:GetCrawlers",
           "glue:CreateCrawler",
           "glue:UpdateCrawler",
-          "glue:DeleteCrawler"
+          "glue:DeleteCrawler",
+          "glue:GetTags"
         ]
 
         Resource = "*"
@@ -100,7 +101,6 @@ resource "aws_iam_role_policy" "github_deploy" {
       # Manage the Glue execution role
       {
         Effect = "Allow"
-
         Action = [
           "iam:GetRole",
           "iam:CreateRole",
@@ -116,8 +116,10 @@ resource "aws_iam_role_policy" "github_deploy" {
           "iam:TagRole",
           "iam:UntagRole"
         ]
-
-        Resource = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/service-role/AWSGlueServiceRole-MetroOpsBronzeCrawler"
+        Resource = [
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/service-role/AWSGlueServiceRole-MetroOpsBronzeCrawler",
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/MetroOpsGitHubDeployRole"
+        ]
       },
 
       {
